@@ -12,6 +12,7 @@ href="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.25.0/maps/maps.css"/>
 <style>
 html, body {
     margin: 0;
+    padding: 0;
     width: 100%;
     height: 100%;
 }
@@ -29,7 +30,7 @@ html, body {
     background: white;
     padding: 10px;
     border-radius: 5px;
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     font-weight: bold;
 }
 </style>
@@ -38,8 +39,8 @@ html, body {
 <body>
 
 <div class="panel">
-South West Traffic Monitor<br>
-M4 | M5 | A30 | A38 | A303
+    South West Traffic Monitor<br>
+    M4 | M5 | A30 | A38 | A303
 </div>
 
 <div id="map"></div>
@@ -48,16 +49,29 @@ M4 | M5 | A30 | A38 | A303
 
 <script>
 
+const apiKey = "6lm9hE1rwlSfkwyKV5cDglVa3d4LSRpT";
+
+const centre = [-3.15, 51.15];
+
 const map = tt.map({
-    key: '6lm9hE1rwlSfkwyKV5cDglVa3d4LSRpT',
+    key: apiKey,
     container: 'map',
-    center: [-3.15, 51.15],
+    center: centre,
     zoom: 7
 });
 
 map.addControl(new tt.NavigationControl());
 
-// Refresh page every minute
+// Re-centre every 30 seconds
+setInterval(() => {
+    map.flyTo({
+        center: centre,
+        zoom: 7,
+        speed: 0.5
+    });
+}, 30000);
+
+// Refresh page every 60 seconds
 setInterval(() => {
     location.reload();
 }, 60000);

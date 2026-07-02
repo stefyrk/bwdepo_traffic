@@ -1,34 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>South West Map</title>
+<meta charset="utf-8">
+<title>South West Traffic Monitor</title>
 
-<link rel="stylesheet"
-href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link href="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.25.0/maps/maps.css" rel="stylesheet">
 
 <style>
-html,body,#map{
-    height:100%;
-    margin:0;
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+.panel {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: Arial;
+    font-weight: bold;
 }
 </style>
 
+<script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.25.0/maps/maps-web.min.js"></script>
+
 </head>
+
 <body>
+
+<div class="panel">
+South West Traffic Monitor<br>
+M4 | M5 | A30 | A38 | A303
+</div>
 
 <div id="map"></div>
 
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
 <script>
 
-var map = L.map('map').setView([50.95,-3.45],8);
+const centre = [-3.45, 50.95];
 
-L.tileLayer(
-'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-{
-    attribution:'© OpenStreetMap'
-}).addTo(map);
+const map = tt.map({
+    key: '6lm9hE1rwlSfkwyKV5cDglVa3d4LSRpT',
+    container: 'map',
+    center: centre,
+    zoom: 8
+});
+
+map.addControl(new tt.NavigationControl());
+
+map.on('load', function () {
+
+    map.addTier(new tt.TrafficFlowTilesTier().setVisibility(true));
+
+});
+
+setInterval(() => {
+
+    map.jumpTo({
+        center: centre,
+        zoom: 8
+    });
+
+}, 30000);
 
 </script>
 

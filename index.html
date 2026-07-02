@@ -1,16 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>South West Traffic Monitor</title>
 
-<link href="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.25.0/maps/maps.css" rel="stylesheet">
+<link rel="stylesheet"
+href="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.25.0/maps/maps.css"/>
 
 <style>
 html, body {
     margin: 0;
     padding: 0;
+    width: 100%;
     height: 100%;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
 }
 
 #map {
@@ -22,61 +28,71 @@ html, body {
     position: absolute;
     top: 10px;
     left: 10px;
-    z-index: 1000;
-    background: white;
-    padding: 10px;
-    border-radius: 5px;
-    font-family: Arial;
+    z-index: 9999;
+    background: rgba(255,255,255,0.95);
+    padding: 12px;
+    border-radius: 6px;
     font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 </style>
-
-<script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.25.0/maps/maps-web.min.js"></script>
-
 </head>
 
 <body>
 
 <div class="panel">
-South West Traffic Monitor<br>
-M4 | M5 | A30 | A38 | A303
+    South West Traffic Monitor<br>
+    M4 | M5 | A30 | A38 | A303
 </div>
 
 <div id="map"></div>
 
+<script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.25.0/maps/maps-web.min.js"></script>
+
 <script>
 
-const centre = [-3.0, 51.1];
+// Replace with your TomTom API key
+const apiKey = "6lm9hE1rwlSfkwyKV5cDglVa3d4LSRpT";
+
+// Best view for Bridgwater transport operations
+const centre = [-3.15, 51.15];
 
 const map = tt.map({
-    key: '6lm9hE1rwlSfkwyKV5cDglVa3d4LSRpT',
+    key: apiKey,
     container: 'map',
     center: centre,
-    zoom: 7
+    zoom: 7,
+    dragPan: true
 });
 
 map.addControl(new tt.NavigationControl());
 
-map.on('load', function () {
+map.on('load', () => {
 
-    const flowLayer = tt.trafficFlowTilesDataSource({
-        key: 'YOUR_API_KEY'
-    });
-
-    map.addLayer({
-        id: 'traffic-flow',
-        type: 'line',
-        source: flowLayer
-    });
+    // Live Traffic Flow Layer
+    map.addTier(
+        new tt.TrafficFlowTilesTier().setVisibility(true)
+    );
 
 });
-`
 
+// Keep map centred every 30 seconds
+setInterval(() => {
+
+    map.flyTo({
+        center: centre,
+        zoom: 7,
+        speed: 0.5
+    });
+
+}, 30000);
+
+// Full page refresh every minute
 setInterval(() => {
 
     location.reload();
 
-}, 30000);
+}, 60000);
 
 </script>
 

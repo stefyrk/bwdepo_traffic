@@ -1,31 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>South West Traffic Monitor</title>
+<title>South West Map</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
 <style>
-body{
-    font-family: Arial, sans-serif;
-    text-align:center;
-    margin-top:100px;
-}
-a{
-    background:#33c;
-    color:white;
-    padding:15px 25px;
-    text-decoration:none;
-    border-radius:5px;
+html,body,#map{
+    height:100%;
+    margin:0;
 }
 </style>
 
 </head>
 <body>
 
-<h1>South West Traffic Monitor</h1>
+<div id="map"></div>
 
-<a href="https://www.waze.com/live-map" target="_blank">
-Open Live Traffic Map
-</a>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+var map = L.map('map').setView([50.95,-3.45],8);
+
+L.tileLayer(
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+{
+    attribution:'© OpenStreetMap'
+}).addTo(map);
+
+</script>
 
 </body>
 </html>
